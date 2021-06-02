@@ -105,18 +105,37 @@
           <p class="heading">Date</p>
           <input
             type="date"
-            id="birthday"
-            name="birthday"
+            id="day_date"
+            name="day_date"
             style="border: none; width: 275px"
             class="title"
           />
-          <!-- <p class="title">05/31/2021</p> -->
         </div>
       </div>
       <div class="level-item has-text-centered">
         <div>
           <p class="heading">Add Event</p>
-          <i class="title fas fa-plus"></i>
+          <i class="title fas fa-plus" id="add-event-icon"></i>
+
+          <!-- Modal Card -->
+          <div class="modal" id="add-event-modal-div">
+            <div class="modal-background"></div>
+            <div class="modal-card">
+              <header class="modal-card-head">
+                <p class="modal-card-title">Modal title</p>
+                <button class="delete" aria-label="close"></button>
+              </header>
+              <section class="modal-card-body">
+                <!-- Content ... -->
+              </section>
+              <footer class="modal-card-foot">
+                <button class="button is-success">Save Event</button>
+                <button class="button" id="add-event-modal-card-cancel-button">
+                  Cancel
+                </button>
+              </footer>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -211,6 +230,6 @@
         </div>
       </div>
     </div>
-    <script src="{% static 'scripts/schedule.js' %}"></script>
+    <script src="{% static 'scripts/main.js' %}"></script>
   </body>
 </html>
