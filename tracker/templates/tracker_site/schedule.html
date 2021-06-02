@@ -122,14 +122,56 @@
             <div class="modal-background"></div>
             <div class="modal-card">
               <header class="modal-card-head">
-                <p class="modal-card-title">Modal title</p>
-                <button class="delete" aria-label="close"></button>
+                <p class="modal-card-title title">Add Event</p>
+                <button
+                  class="delete"
+                  aria-label="close"
+                  id="add-event-modal-card-close-button"
+                ></button>
               </header>
               <section class="modal-card-body">
-                <!-- Content ... -->
+                <section class="section">
+                  <p class="heading">Event Date</p>
+                  <input
+                    type="date"
+                    id="event-date"
+                    name="event-date"
+                    style="border: none; width: 275px"
+                    class="title"
+                  />
+                </section>
+                <section class="section">
+                  <p class="heading">Event Time</p>
+                  <input
+                    type="time"
+                    name="event-time"
+                    id="event-time"
+                    class="title"
+                  />
+                </section>
+                <section class="section">
+                  <p class="heading">Event Description</p>
+                  <textarea
+                    name="event-desc"
+                    id="event-desc"
+                    cols="50"
+                    rows="5"
+                    style="
+                      color: gray;
+                      border: 1px solid lightgray;
+                      font-size: 20px;
+                      padding: 15px;
+                    "
+                  ></textarea>
+                </section>
               </section>
               <footer class="modal-card-foot">
-                <button class="button is-success">Save Event</button>
+                <button
+                  class="button is-success"
+                  id="add-event-modal-card-save-button"
+                >
+                  Save Event
+                </button>
                 <button class="button" id="add-event-modal-card-cancel-button">
                   Cancel
                 </button>
@@ -230,6 +272,6 @@
         </div>
       </div>
     </div>
-    <script src="{% static 'scripts/main.js' %}"></script>
+    <script src="{% static 'scripts/main1.js' %}"></script>
   </body>
 </html>
