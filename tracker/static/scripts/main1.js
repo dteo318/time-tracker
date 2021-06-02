@@ -43,6 +43,21 @@ const add_event_modal_save_button = document.getElementById(
   "add-event-modal-card-save-button"
 );
 
+function inTimeBracket(time) {
+  const hours = time.split(":")[0];
+  const mins = time.split(":")[1];
+
+  if (hours >= 7 && hours < 12) {
+    return 1;
+  } else if (hours >= 12 && hours < 17) {
+    return 2;
+  } else if (hours >= 17 && hours < 22) {
+    return 3;
+  } else {
+    return 4;
+  }
+}
+
 add_event_modal_save_button.addEventListener("click", function () {
   console.log("SAVED EVENT");
   const add_event_modal_date_select = document.getElementById("event-date");
@@ -57,6 +72,7 @@ add_event_modal_save_button.addEventListener("click", function () {
     selected_event_date: selected_event_date,
     selected_event_time: selected_event_time,
     selected_event_desc: selected_event_desc,
+    selected_event_time_bracket: inTimeBracket(selected_event_time),
   };
 
   console.log(add_event_data);
