@@ -16,7 +16,7 @@
       crossorigin="anonymous"
     ></script>
   </head>
-  <body>
+  <body onload="setCurrentDayDate()">
     <nav class="navbar is-light" role="navigation" aria-label="main navigation">
       <div class="navbar-brand">
         <strong class="navbar-item" style="font-size: 20px"
@@ -105,8 +105,8 @@
           <p class="heading">Date</p>
           <input
             type="date"
-            id="day_date"
-            name="day_date"
+            id="day-date"
+            name="day-date"
             style="border: none; width: 275px"
             class="title"
           />
