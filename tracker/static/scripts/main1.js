@@ -77,6 +77,9 @@ add_event_modal_save_button.addEventListener("click", function () {
 
   console.log(add_event_data);
 
+  // Clearing previous event description
+  add_event_modal_desc_select.value = "";
+
   // Closing add event modal after saving
   const modal_div = document.getElementById("add-event-modal-div");
   modal_div.classList.remove("is-active");
