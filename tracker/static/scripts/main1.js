@@ -98,3 +98,5 @@ function setCurrentDayDate() {
   day_date.value = current_date;
   console.log("CURRENT DATE SET!");
 }
+
+console.log("YOOO");
