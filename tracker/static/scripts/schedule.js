@@ -91,7 +91,7 @@ function formatDate(event_date) {
   return `${day} ${month} ${year}`;
 }
 
-function buildCard(event_date, event_time, event_desc) {
+function buildCard(event_date, event_time, event_duration, event_desc) {
   const card_container = document.createElement("div");
   card_container.className = "card";
 
@@ -102,7 +102,7 @@ function buildCard(event_date, event_time, event_desc) {
   const card_image_img = document.createElement("img");
   card_image_img.src = "https://bulma.io/images/placeholders/1280x960.png";
   card_image_img.alt = "Placeholder image";
-  console.log(card_image_img);
+
   card_image_figure.appendChild(card_image_img);
   card_image.appendChild(card_image_figure);
   card_container.appendChild(card_image);
@@ -112,26 +112,28 @@ function buildCard(event_date, event_time, event_desc) {
 
   const card_content_media = document.createElement("div");
   card_content_media.className = "media";
-  const card_content_media_left = document.createElement("div");
-  card_content_media_left.className = "media-left";
-  const card_content_media_figure = document.createElement("figure");
-  card_content_media_figure.className = "image is-48x48";
-  const card_content_media_img = document.createElement("img");
-  card_content_media_img.src = "https://bulma.io/images/placeholders/96x96.png";
-  card_content_media_img.alt = "Placeholder image";
-  card_content_media_figure.appendChild(card_content_media_img);
-  card_content_media_left.appendChild(card_content_media_figure);
-  card_content_media.appendChild(card_content_media_left);
+  //   Removed media left portion
+  //   const card_content_media_left = document.createElement("div");
+  //   card_content_media_left.className = "media-left";
+  //   const card_content_media_figure = document.createElement("figure");
+  //   card_content_media_figure.className = "image is-48x48";
+  //   const card_content_media_img = document.createElement("img");
+  //   card_content_media_img.src = "https://bulma.io/images/placeholders/96x96.png";
+  //   card_content_media_img.alt = "Placeholder image";
+  //   card_content_media_figure.appendChild(card_content_media_img);
+  //   card_content_media_left.appendChild(card_content_media_figure);
+  //   card_content_media.appendChild(card_content_media_left);
 
   const card_content_media_content = document.createElement("div");
   card_content_media_content.className = "media-content";
   const card_content_media_content_title = document.createElement("p");
   card_content_media_content_title.className = "title is-4";
-  card_content_media_content_title.innerHTML = "YOOOO";
+  card_content_media_content_title.innerHTML = event_time;
   card_content_media_content.appendChild(card_content_media_content_title);
   const card_content_media_content_sub_title = document.createElement("p");
   card_content_media_content_sub_title.className = "subtitle is-6";
-  card_content_media_content_sub_title.innerHTML = "WHAT";
+  card_content_media_content_sub_title.innerHTML =
+    "Duration: " + event_duration + "mins";
   card_content_media_content.appendChild(card_content_media_content_sub_title);
   card_content_media.appendChild(card_content_media_content);
 
@@ -140,12 +142,11 @@ function buildCard(event_date, event_time, event_desc) {
   const card_content_content = document.createElement("div");
   card_content_content.className = "content";
   card_content_content.innerHTML = event_desc;
+
   const card_content_content_br = document.createElement("br");
   card_content_content.appendChild(card_content_content_br);
   const card_content_content_time = document.createElement("time");
-  // TODO Change event date presentation
-  card_content_content_time.innerHTML =
-    event_time + " - " + formatDate(event_date);
+  card_content_content_time.innerHTML = formatDate(event_date);
   card_content_content.appendChild(card_content_content_time);
 
   card_content.appendChild(card_content_content);
@@ -156,7 +157,6 @@ function buildCard(event_date, event_time, event_desc) {
 }
 
 function addEventCard(add_event_data) {
-  // TODO Touch up event card presentation
   const day_event_column_1 = document.getElementById("day-event-column-1");
   const day_event_column_2 = document.getElementById("day-event-column-2");
   const day_event_column_3 = document.getElementById("day-event-column-3");
@@ -165,7 +165,13 @@ function addEventCard(add_event_data) {
   const event_date = add_event_data.selected_event_date;
   const event_time = add_event_data.selected_event_time;
   const event_desc = add_event_data.selected_event_desc;
-  const event_card = buildCard(event_date, event_time, event_desc);
+  const event_duration = add_event_data.selected_event_duration;
+  const event_card = buildCard(
+    event_date,
+    event_time,
+    event_duration,
+    event_desc
+  );
 
   const event_tile = document.createElement("div");
   event_tile.className = "tile is-child";
@@ -209,20 +215,23 @@ add_event_modal_save_button.addEventListener("click", function () {
   console.log("SAVED EVENT");
   const add_event_modal_date_select = document.getElementById("event-date");
   const add_event_modal_time_select = document.getElementById("event-time");
+  const add_event_modal_duration_select = document.getElementById(
+    "event-duration"
+  );
   const add_event_modal_desc_select = document.getElementById("event-desc");
 
   const selected_event_date = add_event_modal_date_select.value;
   const selected_event_time = add_event_modal_time_select.value;
+  const selected_event_duration = add_event_modal_duration_select.value;
   const selected_event_desc = add_event_modal_desc_select.value;
 
   const add_event_data = {
     selected_event_date: selected_event_date,
     selected_event_time: selected_event_time,
+    selected_event_duration: selected_event_duration,
     selected_event_desc: selected_event_desc,
     selected_event_time_bracket: inTimeBracket(selected_event_time),
   };
-
-  console.log(add_event_data);
 
   addEventCard(add_event_data);
 

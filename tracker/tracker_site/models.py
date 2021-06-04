@@ -21,7 +21,8 @@ class Day(models.Model):
 class Event(models.Model):
     task_done = models.CharField(max_length=200)
     task_date = models.ForeignKey(Day, on_delete=models.CASCADE)
-    task_time = models.TimeField(default=time.localtime())
+    task_start_time = models.TimeField(auto_now_add=True)
+    task_duration = models.IntegerField()
 
     def __str__(self):
         return self.task_done
