@@ -43,6 +43,103 @@ const add_event_modal_save_button = document.getElementById(
   "add-event-modal-card-save-button"
 );
 
+function buildCard(event_date, event_time, event_desc) {
+  const card_container = document.createElement("div");
+  card_container.className = "card";
+
+  const card_image = document.createElement("div");
+  card_image.className = "card-image";
+  const card_image_figure = document.createElement("figure");
+  card_image_figure.className = "image is-4by3";
+  const card_image_img = document.createElement("img");
+  card_image_img.src = "https://bulma.io/images/placeholders/1280x960.png";
+  card_image_img.alt = "Placeholder image";
+  console.log(card_image_img);
+  card_image_figure.appendChild(card_image_img);
+  card_image.appendChild(card_image_figure);
+  card_container.appendChild(card_image);
+
+  const card_content = document.createElement("div");
+  card_content.className = "card-content";
+
+  const card_content_media = document.createElement("div");
+  card_content_media.className = "media";
+  const card_content_media_left = document.createElement("div");
+  card_content_media_left.className = "media-left";
+  const card_content_media_figure = document.createElement("figure");
+  card_content_media_figure.className = "image is-48x48";
+  const card_content_media_img = document.createElement("img");
+  card_content_media_img.src = "https://bulma.io/images/placeholders/96x96.png";
+  card_content_media_img.alt = "Placeholder image";
+  card_content_media_figure.appendChild(card_content_media_img);
+  card_content_media_left.appendChild(card_content_media_figure);
+  card_content_media.appendChild(card_content_media_left);
+
+  const card_content_media_content = document.createElement("div");
+  card_content_media_content.className = "media-content";
+  const card_content_media_content_title = document.createElement("p");
+  card_content_media_content_title.className = "title is-4";
+  card_content_media_content_title.innerHTML = "YOOOO";
+  card_content_media_content.appendChild(card_content_media_content_title);
+  const card_content_media_content_sub_title = document.createElement("p");
+  card_content_media_content_sub_title.className = "subtitle is-6";
+  card_content_media_content_sub_title.innerHTML = "WHAT";
+  card_content_media_content.appendChild(card_content_media_content_sub_title);
+  card_content_media.appendChild(card_content_media_content);
+
+  card_content.appendChild(card_content_media);
+
+  const card_content_content = document.createElement("div");
+  card_content_content.className = "content";
+  card_content_content.innerHTML = event_desc;
+  const card_content_content_br = document.createElement("br");
+  card_content_content.appendChild(card_content_content_br);
+  const card_content_content_time = document.createElement("time");
+  card_content_content_time.innerHTML = event_time + " - " + event_date;
+  card_content_content.appendChild(card_content_content_time);
+
+  card_content.appendChild(card_content_content);
+
+  card_container.appendChild(card_content);
+
+  return card_container;
+}
+
+function addEventCard(add_event_data) {
+  // TODO Touch up event card presentation
+  const day_event_column_1 = document.getElementById("day-event-column-1");
+  const day_event_column_2 = document.getElementById("day-event-column-2");
+  const day_event_column_3 = document.getElementById("day-event-column-3");
+  const day_event_column_4 = document.getElementById("day-event-column-4");
+
+  const event_date = add_event_data.selected_event_date;
+  const event_time = add_event_data.selected_event_time;
+  const event_desc = add_event_data.selected_event_desc;
+  const event_card = buildCard(event_date, event_time, event_desc);
+
+  const event_tile = document.createElement("div");
+  event_tile.className = "tile is-child";
+  event_tile.appendChild(event_card);
+
+  const event_time_bracket = add_event_data.selected_event_time_bracket;
+  switch (event_time_bracket) {
+    case 1:
+      day_event_column_1.appendChild(event_tile);
+      break;
+    case 2:
+      day_event_column_2.appendChild(event_tile);
+      break;
+    case 3:
+      day_event_column_3.appendChild(event_tile);
+      break;
+    case 4:
+      day_event_column_4.appendChild(event_tile);
+      break;
+  }
+
+  console.log("CARD ADDED!");
+}
+
 function inTimeBracket(time) {
   const hours = time.split(":")[0];
   const mins = time.split(":")[1];
@@ -77,6 +174,8 @@ add_event_modal_save_button.addEventListener("click", function () {
 
   console.log(add_event_data);
 
+  addEventCard(add_event_data);
+
   // Clearing previous event description
   add_event_modal_desc_select.value = "";
 
@@ -98,5 +197,3 @@ function setCurrentDayDate() {
   day_date.value = current_date;
   console.log("CURRENT DATE SET!");
 }
-
-console.log("YOOO");
