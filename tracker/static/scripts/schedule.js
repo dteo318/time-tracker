@@ -43,6 +43,54 @@ const add_event_modal_save_button = document.getElementById(
   "add-event-modal-card-save-button"
 );
 
+function formatDate(event_date) {
+  // 2021-06-03 -> 3 Jun 2021
+  const year = event_date.split("-")[0];
+  const day = parseInt(event_date.split("-")[2]);
+  let month = "";
+
+  switch (parseInt(event_date.split("-")[1])) {
+    case 1:
+      month = "Jan";
+      break;
+    case 2:
+      month = "Feb";
+      break;
+    case 3:
+      month = "Mar";
+      break;
+    case 4:
+      month = "Apr";
+      break;
+    case 5:
+      month = "May";
+      break;
+    case 6:
+      month = "Jun";
+      break;
+    case 7:
+      month = "Jul";
+      break;
+    case 8:
+      month = "Aug";
+      break;
+    case 9:
+      month = "Sep";
+      break;
+    case 10:
+      month = "Oct";
+      break;
+    case 11:
+      month = "Nov";
+      break;
+    case 12:
+      month = "Dec";
+      break;
+  }
+
+  return `${day} ${month} ${year}`;
+}
+
 function buildCard(event_date, event_time, event_desc) {
   const card_container = document.createElement("div");
   card_container.className = "card";
@@ -95,7 +143,9 @@ function buildCard(event_date, event_time, event_desc) {
   const card_content_content_br = document.createElement("br");
   card_content_content.appendChild(card_content_content_br);
   const card_content_content_time = document.createElement("time");
-  card_content_content_time.innerHTML = event_time + " - " + event_date;
+  // TODO Change event date presentation
+  card_content_content_time.innerHTML =
+    event_time + " - " + formatDate(event_date);
   card_content_content.appendChild(card_content_content_time);
 
   card_content.appendChild(card_content_content);
