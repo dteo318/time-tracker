@@ -109,6 +109,7 @@
             name="day-date"
             style="border: none; width: 275px"
             class="title"
+            onchange="loadDayEvents()"
           />
         </div>
       </div>
@@ -245,6 +246,11 @@
         ></div>
       </div>
     </div>
-    <script src="{% static 'scripts/schedule.js' %}"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"
+    ></script>
+    <script src="{% static 'scripts/schedule1.js' %}"></script>
   </body>
 </html>

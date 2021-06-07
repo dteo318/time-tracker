@@ -211,6 +211,8 @@ function inTimeBracket(time) {
   }
 }
 
+// TODO Allow for deletion of events
+
 add_event_modal_save_button.addEventListener("click", function () {
   console.log("SAVED EVENT");
   const add_event_modal_date_select = document.getElementById("event-date");
@@ -233,14 +235,30 @@ add_event_modal_save_button.addEventListener("click", function () {
     selected_event_time_bracket: inTimeBracket(selected_event_time),
   };
 
-  addEventCard(add_event_data);
+  $.ajax({
+    url: "/ajax/add_event",
+    data: add_event_data,
+    dataType: "json",
+    success: function (data) {
+      // Reading response data
+      console.log(data.result);
 
-  // Clearing previous event description
-  add_event_modal_desc_select.value = "";
+      addEventCard(add_event_data);
 
-  // Closing add event modal after saving
-  const modal_div = document.getElementById("add-event-modal-div");
-  modal_div.classList.remove("is-active");
+      // Clearing previous event description
+      add_event_modal_desc_select.value = "";
+
+      //   Clearing previous event duration
+      const add_event_modal_duration_select = document.getElementById(
+        "event-duration"
+      );
+      add_event_modal_duration_select.value = "";
+
+      // Closing add event modal after saving
+      const modal_div = document.getElementById("add-event-modal-div");
+      modal_div.classList.remove("is-active");
+    },
+  });
 });
 
 // Setting date to current date on load
@@ -255,4 +273,55 @@ function setCurrentDayDate() {
 
   day_date.value = current_date;
   console.log("CURRENT DATE SET!");
+
+  loadDayEvents();
+}
+
+function loadDayEvents() {
+  console.log("Date has changed! Loading events for the day...");
+
+  const day_date = document.getElementById("day-date");
+
+  $.ajax({
+    url: "/ajax/read_day_events",
+    data: {
+      date: day_date.value,
+    },
+    dataType: "json",
+    success: function (data) {
+      const response_events = JSON.parse(data.events);
+      console.log(response_events);
+      console.log("Working");
+      //   Clearing previous event cards
+      const day_event_column_1 = document.getElementById("day-event-column-1");
+      const day_event_column_2 = document.getElementById("day-event-column-2");
+      const day_event_column_3 = document.getElementById("day-event-column-3");
+      const day_event_column_4 = document.getElementById("day-event-column-4");
+
+      day_event_column_1.innerHTML = "";
+      day_event_column_2.innerHTML = "";
+      day_event_column_3.innerHTML = "";
+      day_event_column_4.innerHTML = "";
+
+      //   Loading events as cards
+
+      console.log("Loading event cards");
+
+      for (i = 0; i < response_events.length; i++) {
+        event_obj = response_events[i];
+        console.log(event_obj);
+        const event_data = {
+          selected_event_date: data.date,
+          selected_event_time: event_obj.fields.task_start_time,
+          selected_event_duration: event_obj.fields.task_duration,
+          selected_event_desc: event_obj.fields.task_done,
+          selected_event_time_bracket: inTimeBracket(
+            event_obj.fields.task_start_time
+          ),
+        };
+
+        addEventCard(event_data);
+      }
+    },
+  });
 }

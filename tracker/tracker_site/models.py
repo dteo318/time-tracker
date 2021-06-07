@@ -11,17 +11,14 @@ class Day(models.Model):
         (":(", "Terrible")
     ]
 
-    record_date = models.DateField(auto_now_add=True)
+    record_date = models.DateField()
     feeling = models.CharField(max_length=2, choices=FEELING_CHOICES, default=":|")
     summary = models.TextField()
-
-    def __str__(self):
-        return self.record_date
 
 class Event(models.Model):
     task_done = models.CharField(max_length=200)
     task_date = models.ForeignKey(Day, on_delete=models.CASCADE)
-    task_start_time = models.TimeField(auto_now_add=True)
+    task_start_time = models.TimeField()
     task_duration = models.IntegerField()
 
     def __str__(self):
