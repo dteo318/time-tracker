@@ -16,17 +16,22 @@ def read_day_view(request):
         # Day object for today exists
         day_created = "No"
         events = Event.objects.filter(task_date=current_day[0])
+        feeling = current_day[0].feeling
+
     else:
         # Day object is not created yet
-        new_day = Day(record_date=current_date, feeling=":D", summary="This is a test!")
+        # TODO Need to allow user to input summary
+        new_day = Day(record_date=current_date)
         new_day.save()
         day_created = "Yes"
         events = []
+        feeling = None
 
     data = {
         'is_day_created' : day_created, 
         'events' : serializers.serialize('json', events),
         'date' : current_date,
+        'feeling' : feeling,
     }
 
     return JsonResponse(data)
@@ -49,6 +54,34 @@ def create_event_view(request):
 
     return JsonResponse(data)
 
+# TODO allow user to delete or edit events
 def delete_event_view(request):
     pass
 
+def update_day_feeling_view(request):
+    update_type = request.GET.get("update_type")
+    current_date = request.GET.get("date")
+    if update_type == "remove-feeling":
+        current_day = Day.objects.filter(record_date=current_date)[0]
+        current_day.feeling = None
+        current_day.save(update_fields=["feeling"]) 
+
+        data = {
+            "date" : current_date,
+            "selected_feeling" : "null"
+        }
+
+        return JsonResponse(data)
+
+    selected_feeling = request.GET.get("selected_feeling").split("-")[2]
+
+    current_day = Day.objects.filter(record_date=current_date)[0]
+    current_day.feeling = selected_feeling
+    current_day.save(update_fields=["feeling"]) 
+
+    data = {
+        "date" : current_date,
+        "selected_feeling" : selected_feeling
+    }
+
+    return JsonResponse(data)

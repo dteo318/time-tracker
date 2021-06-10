@@ -12,8 +12,8 @@ class Day(models.Model):
     ]
 
     record_date = models.DateField()
-    feeling = models.CharField(max_length=2, choices=FEELING_CHOICES, default=":|")
-    summary = models.TextField()
+    feeling = models.CharField(max_length=2, choices=FEELING_CHOICES, null=True)
+    summary = models.TextField(default="No summary entered for today...")
 
 class Event(models.Model):
     task_done = models.CharField(max_length=200)

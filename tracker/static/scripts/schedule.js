@@ -289,9 +289,20 @@ function loadDayEvents() {
     },
     dataType: "json",
     success: function (data) {
+      // Loading feeling selected
+      const selected_feeling = data.feeling;
+
+      if (selected_feeling) {
+        const selected_feeling_id = "feeling-selector-" + selected_feeling;
+        const selected_feeling_elem = document.getElementById(
+          selected_feeling_id
+        );
+
+        selected_feeling_elem.classList.add("has-text-primary");
+        current_feeling_selected = selected_feeling_id;
+      }
+
       const response_events = JSON.parse(data.events);
-      console.log(response_events);
-      console.log("Working");
       //   Clearing previous event cards
       const day_event_column_1 = document.getElementById("day-event-column-1");
       const day_event_column_2 = document.getElementById("day-event-column-2");
@@ -325,3 +336,59 @@ function loadDayEvents() {
     },
   });
 }
+
+// Setting feeling for the day
+const feeling_selector = document.getElementById("feeling-selector");
+let current_feeling_selected = null;
+
+feeling_selector.addEventListener("click", function (e) {
+  const selected_feeling_id = e.target.id;
+  console.log(`${selected_feeling_id} feeling selected...`);
+
+  const selected_feeling = document.getElementById(selected_feeling_id);
+
+  if (!selected_feeling) {
+    return;
+  }
+
+  if (current_feeling_selected === selected_feeling_id) {
+    const previous_selected_feeling = document.getElementById(
+      current_feeling_selected
+    );
+
+    previous_selected_feeling.classList.remove("has-text-primary");
+
+    current_feeling_selected = null;
+  } else if (current_feeling_selected) {
+    const previous_selected_feeling = document.getElementById(
+      current_feeling_selected
+    );
+
+    previous_selected_feeling.classList.remove("has-text-primary");
+    selected_feeling.classList.add("has-text-primary");
+
+    current_feeling_selected = selected_feeling_id;
+  } else {
+    selected_feeling.classList.add("has-text-primary");
+
+    current_feeling_selected = selected_feeling_id;
+  }
+
+  const day_date = document.getElementById("day-date");
+  const update_type = current_feeling_selected
+    ? "set-feeling"
+    : "remove-feeling";
+
+  $.ajax({
+    url: "/ajax/update_day_feeling",
+    data: {
+      update_type: update_type,
+      date: day_date.value,
+      selected_feeling: current_feeling_selected,
+    },
+    dataType: "json",
+    success: function (data) {
+      console.log("Feeling updated in database");
+    },
+  });
+});

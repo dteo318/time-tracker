@@ -71,21 +71,21 @@
       <div class="level-item has-text-centered">
         <div>
           <p class="heading">I'm feeling...?</p>
-          <ul style="display: inline">
+          <ul style="display: inline" id="feeling-selector">
             <li style="display: inline" class="title">
-              <i class="far fa-sad-tear"></i>
+              <i class="far fa-sad-tear" id="feeling-selector-:("></i>
             </li>
             <li style="display: inline" class="title">
-              <i class="far fa-frown"></i>
+              <i class="far fa-frown" id="feeling-selector-:/"></i>
             </li>
             <li style="display: inline" class="title">
-              <i class="far fa-meh"></i>
+              <i class="far fa-meh" id="feeling-selector-:|"></i>
             </li>
             <li style="display: inline" class="title">
-              <i class="far fa-smile"></i>
+              <i class="far fa-smile" id="feeling-selector-:)"></i>
             </li>
             <li style="display: inline" class="title">
-              <i class="far fa-laugh-beam"></i>
+              <i class="far fa-laugh-beam" id="feeling-selector-:D"></i>
             </li>
           </ul>
         </div>
@@ -251,6 +251,6 @@
       integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
       crossorigin="anonymous"
     ></script>
-    <script src="{% static 'scripts/schedule1.js' %}"></script>
+    <script src="{% static 'scripts/schedule.js' %}"></script>
   </body>
 </html>
