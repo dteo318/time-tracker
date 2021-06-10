@@ -54,9 +54,16 @@ def create_event_view(request):
 
     return JsonResponse(data)
 
-# TODO allow user to delete or edit events
+# TODO allow user to edit events
 def delete_event_view(request):
-    pass
+    event_pk = request.GET.get("event_pk")
+    Event.objects.filter(pk=event_pk).delete()
+
+    data = {
+        "event_pk" : event_pk,
+    }
+
+    return JsonResponse(data)
 
 def update_day_feeling_view(request):
     update_type = request.GET.get("update_type")

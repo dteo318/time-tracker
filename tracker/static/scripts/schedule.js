@@ -91,7 +91,13 @@ function formatDate(event_date) {
   return `${day} ${month} ${year}`;
 }
 
-function buildCard(event_date, event_time, event_duration, event_desc) {
+function buildCard(
+  event_date,
+  event_time,
+  event_duration,
+  event_desc,
+  event_pk
+) {
   const card_container = document.createElement("div");
   card_container.className = "card";
 
@@ -148,6 +154,11 @@ function buildCard(event_date, event_time, event_duration, event_desc) {
   const card_content_content_time = document.createElement("time");
   card_content_content_time.innerHTML = formatDate(event_date);
   card_content_content.appendChild(card_content_content_time);
+  const card_content_content_delete_icon = document.createElement("i");
+  card_content_content_delete_icon.className =
+    "fas fa-trash-alt is-pulled-right mt-2";
+  card_content_content_delete_icon.id = event_pk;
+  card_content_content.appendChild(card_content_content_delete_icon);
 
   card_content.appendChild(card_content_content);
 
@@ -166,16 +177,35 @@ function addEventCard(add_event_data) {
   const event_time = add_event_data.selected_event_time;
   const event_desc = add_event_data.selected_event_desc;
   const event_duration = add_event_data.selected_event_duration;
+  const event_pk = add_event_data.selected_event_pk;
   const event_card = buildCard(
     event_date,
     event_time,
     event_duration,
-    event_desc
+    event_desc,
+    event_pk
   );
 
   const event_tile = document.createElement("div");
   event_tile.className = "tile is-child";
   event_tile.appendChild(event_card);
+  event_tile.addEventListener("click", function (e) {
+    console.log(e.target.id);
+
+    $.ajax({
+      url: "/ajax/delete_event",
+      data: {
+        event_pk: e.target.id,
+      },
+      dataType: "json",
+      success: function (data) {
+        console.log("Event deleted");
+      },
+    });
+
+    this.remove();
+    console.log("Event card removed");
+  });
 
   const event_time_bracket = add_event_data.selected_event_time_bracket;
   switch (event_time_bracket) {
@@ -210,8 +240,6 @@ function inTimeBracket(time) {
     return 4;
   }
 }
-
-// TODO Allow for deletion of events
 
 add_event_modal_save_button.addEventListener("click", function () {
   console.log("SAVED EVENT");
@@ -320,7 +348,7 @@ function loadDayEvents() {
 
       for (i = 0; i < response_events.length; i++) {
         event_obj = response_events[i];
-        console.log(event_obj);
+        console.log(event_obj.pk);
         const event_data = {
           selected_event_date: data.date,
           selected_event_time: event_obj.fields.task_start_time,
@@ -329,6 +357,7 @@ function loadDayEvents() {
           selected_event_time_bracket: inTimeBracket(
             event_obj.fields.task_start_time
           ),
+          selected_event_pk: event_obj.pk,
         };
 
         addEventCard(event_data);
