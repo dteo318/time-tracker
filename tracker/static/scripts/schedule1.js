@@ -91,6 +91,16 @@ function formatDate(event_date) {
   return `${day} ${month} ${year}`;
 }
 
+function formatTime24To12(time) {
+  const hours_24 = time.split(":")[0];
+  const mins = time.split(":")[1];
+  const am_pm = hours_24 > 12 ? "PM" : "AM";
+
+  const hours_12 = hours_24 % 12;
+
+  return hours_12 + ":" + mins + " " + am_pm;
+}
+
 function buildCard(
   event_date,
   event_time,
@@ -174,7 +184,7 @@ function addEventCard(add_event_data) {
   const day_event_column_4 = document.getElementById("day-event-column-4");
 
   const event_date = add_event_data.selected_event_date;
-  const event_time = add_event_data.selected_event_time;
+  const event_time = formatTime24To12(add_event_data.selected_event_time);
   const event_desc = add_event_data.selected_event_desc;
   const event_duration = add_event_data.selected_event_duration;
   const event_pk = add_event_data.selected_event_pk;
@@ -317,6 +327,14 @@ function loadDayEvents() {
     },
     dataType: "json",
     success: function (data) {
+      // Loading current summary
+      const selected_summary = data.summary;
+
+      if (selected_summary) {
+        const day_summary_input = document.getElementById("day-summary");
+        day_summary_input.value = selected_summary;
+      }
+
       // Loading feeling selected
       const selected_feeling = data.feeling;
 
@@ -418,6 +436,32 @@ feeling_selector.addEventListener("click", function (e) {
     dataType: "json",
     success: function (data) {
       console.log("Feeling updated in database");
+    },
+  });
+});
+
+// Handling day summary
+const day_summary_input = document.getElementById("day-summary");
+
+day_summary_input.addEventListener("focusin", function () {
+  day_summary_input.classList.add("has-background-primary-light");
+});
+
+day_summary_input.addEventListener("focusout", function () {
+  day_summary_input.classList.remove("has-background-primary-light");
+
+  const day_summary = day_summary_input.value;
+  const day_date = document.getElementById("day-date");
+
+  $.ajax({
+    url: "/ajax/update_day_summary",
+    data: {
+      date: day_date.value,
+      summary: day_summary,
+    },
+    dataType: "json",
+    success: function (data) {
+      console.log("Day summary has been updated");
     },
   });
 });

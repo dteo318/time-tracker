@@ -15,23 +15,25 @@ def read_day_view(request):
     if len(current_day) != 0:
         # Day object for today exists
         day_created = "No"
-        events = Event.objects.filter(task_date=current_day[0])
+        events = Event.objects.filter(task_date=current_day[0]).order_by("task_start_time")
         feeling = current_day[0].feeling
+        summary = current_day[0].summary
 
     else:
         # Day object is not created yet
-        # TODO Need to allow user to input summary
         new_day = Day(record_date=current_date)
         new_day.save()
         day_created = "Yes"
         events = []
         feeling = None
+        summary = None
 
     data = {
         'is_day_created' : day_created, 
         'events' : serializers.serialize('json', events),
         'date' : current_date,
         'feeling' : feeling,
+        'summary' : summary,
     }
 
     return JsonResponse(data)
@@ -91,4 +93,18 @@ def update_day_feeling_view(request):
         "selected_feeling" : selected_feeling
     }
 
+    return JsonResponse(data)
+
+def update_day_summary_view(request):
+    current_date = request.GET.get("date")
+    day_summary = request.GET.get("summary")
+
+    current_day = Day.objects.filter(record_date=current_date)[0]
+    current_day.summary = day_summary
+    current_day.save(update_fields=["summary"]) 
+
+    data = {
+        "date" : current_date,
+        "summary" : day_summary
+    }
     return JsonResponse(data)
