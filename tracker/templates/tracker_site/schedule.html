@@ -119,7 +119,7 @@
           <p class="heading">Add Event</p>
           <i class="title fas fa-plus" id="add-event-icon"></i>
 
-          <!-- Modal Card -->
+          <!-- Add event modal card -->
           <div class="modal" id="add-event-modal-div">
             <div class="modal-background"></div>
             <div class="modal-card">
@@ -228,6 +228,79 @@
       </div>
     </div>
     <div class="container mt-3">
+      <!-- Add event modal card -->
+      <div class="modal has-text-centered" id="edit-event-modal-div">
+        <div class="modal-background"></div>
+        <div class="modal-card">
+          <header class="modal-card-head">
+            <p class="modal-card-title title">Add Event</p>
+            <button
+              class="delete"
+              aria-label="close"
+              id="edit-event-modal-card-close-button"
+            ></button>
+          </header>
+          <section class="modal-card-body">
+            <section class="section">
+              <p class="heading">Event Date</p>
+              <input
+                type="date"
+                id="new-event-date"
+                name="event-date"
+                style="border: none; width: 275px"
+                class="title"
+              />
+            </section>
+            <section class="section">
+              <p class="heading">Event Start Time</p>
+              <input
+                type="time"
+                name="event-time"
+                id="new-event-time"
+                class="title"
+              />
+            </section>
+            <section class="section">
+              <p class="heading">Event Duration</p>
+              <input
+                type="number"
+                name="event-duration"
+                id="new-event-duration"
+                class="title has-text-centered"
+                step="1"
+                min="1"
+                style="width: 100px"
+              />
+            </section>
+            <section class="section">
+              <p class="heading">Event Description</p>
+              <textarea
+                name="event-desc"
+                id="new-event-desc"
+                cols="50"
+                rows="5"
+                style="
+                  color: gray;
+                  border: 1px solid lightgray;
+                  font-size: 20px;
+                  padding: 15px;
+                "
+              ></textarea>
+            </section>
+          </section>
+          <footer class="modal-card-foot">
+            <button
+              class="button is-success"
+              id="edit-event-modal-card-save-button"
+            >
+              Save Changes
+            </button>
+            <button class="button" id="edit-event-modal-card-cancel-button">
+              Cancel
+            </button>
+          </footer>
+        </div>
+      </div>
       <div class="tile is-ancestor">
         <div
           class="tile is-3 is-vertical is-parent"

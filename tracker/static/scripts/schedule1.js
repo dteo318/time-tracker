@@ -164,10 +164,14 @@ function buildCard(
   const card_content_content_time = document.createElement("time");
   card_content_content_time.innerHTML = formatDate(event_date);
   card_content_content.appendChild(card_content_content_time);
+  const card_content_content_edit_icon = document.createElement("i");
+  card_content_content_edit_icon.className = "fas fa-edit ml-3";
+  card_content_content_edit_icon.id = "edit-" + event_pk;
+  card_content_content.appendChild(card_content_content_edit_icon);
   const card_content_content_delete_icon = document.createElement("i");
   card_content_content_delete_icon.className =
-    "fas fa-trash-alt is-pulled-right mt-2";
-  card_content_content_delete_icon.id = event_pk;
+    "fas fa-trash-alt is-pulled-right mt-1";
+  card_content_content_delete_icon.id = "delete-" + event_pk;
   card_content_content.appendChild(card_content_content_delete_icon);
 
   card_content.appendChild(card_content_content);
@@ -200,21 +204,112 @@ function addEventCard(add_event_data) {
   event_tile.className = "tile is-child";
   event_tile.appendChild(event_card);
   event_tile.addEventListener("click", function (e) {
-    console.log(e.target.id);
+    if (!e.target.id) {
+      return;
+    }
 
-    $.ajax({
-      url: "/ajax/delete_event",
-      data: {
-        event_pk: e.target.id,
-      },
-      dataType: "json",
-      success: function (data) {
-        console.log("Event deleted");
-      },
-    });
+    const tile_click_type = e.target.id.split("-")[0];
+    const tile_pk = e.target.id.split("-")[1];
 
-    this.remove();
-    console.log("Event card removed");
+    switch (tile_click_type) {
+      case "delete":
+        $.ajax({
+          url: "/ajax/delete_event",
+          data: {
+            event_pk: tile_pk,
+          },
+          dataType: "json",
+          success: function (data) {
+            console.log("Event deleted");
+          },
+        });
+
+        this.remove();
+        console.log("Event card removed");
+        break;
+
+      case "edit":
+        //   Triggering edit event modal
+        const edit_event_modal_div = document.getElementById(
+          "edit-event-modal-div"
+        );
+        edit_event_modal_div.classList.add("is-active");
+
+        const edit_event_modal_cancel_button = document.getElementById(
+          "edit-event-modal-card-cancel-button"
+        );
+        const edit_event_modal_close_button = document.getElementById(
+          "edit-event-modal-card-close-button"
+        );
+        edit_event_modal_cancel_button.addEventListener("click", function () {
+          const modal_div = document.getElementById("edit-event-modal-div");
+          modal_div.classList.remove("is-active");
+        });
+
+        edit_event_modal_close_button.addEventListener("click", function () {
+          const modal_div = document.getElementById("edit-event-modal-div");
+          modal_div.classList.remove("is-active");
+        });
+
+        // Setting modal fields to current values
+        const edit_event_date_field = document.getElementById("new-event-date");
+        const edit_event_time_field = document.getElementById("new-event-time");
+        const edit_event_duration_field = document.getElementById(
+          "new-event-duration"
+        );
+        const edit_event_desc_field = document.getElementById("new-event-desc");
+        $.ajax({
+          url: "/ajax/get_event_info",
+          data: {
+            event_pk: tile_pk,
+          },
+          dataType: "json",
+          success: function (data) {
+            edit_event_date_field.value = data.date;
+            edit_event_time_field.value = data.time;
+            edit_event_duration_field.value = data.duration;
+            edit_event_desc_field.value = data.desc;
+          },
+        });
+
+        // Updating database
+        const edit_tile_save_changes_button = document.getElementById(
+          "edit-event-modal-card-save-button"
+        );
+        edit_tile_save_changes_button.onclick = function () {
+          const new_event_data = {
+            event_pk: tile_pk,
+            event_date: edit_event_date_field.value,
+            event_time: edit_event_time_field.value,
+            event_duration: edit_event_duration_field.value,
+            event_desc: edit_event_desc_field.value,
+          };
+
+          $.ajax({
+            url: "/ajax/edit_event_info",
+            data: new_event_data,
+            dataType: "json",
+            success: function (data) {
+              const event_data = {
+                selected_event_date: data.event_date,
+                selected_event_time: data.event_time,
+                selected_event_duration: data.event_duration,
+                selected_event_desc: data.event_desc,
+                selected_event_time_bracket: inTimeBracket(data.event_time),
+                selected_event_pk: data.event_pk,
+              };
+
+              addEventCard(event_data);
+              e.target.parentNode.parentNode.parentNode.parentNode.remove();
+            },
+          });
+
+          edit_event_modal_div.classList.remove("is-active");
+          console.log("Tile changes saved");
+        };
+
+        break;
+    }
   });
 
   const event_time_bracket = add_event_data.selected_event_time_bracket;

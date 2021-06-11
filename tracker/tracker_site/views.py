@@ -4,6 +4,17 @@ from django.core import serializers
 from .models import Day, Event
 import json
 
+# Helpers
+def get_day(date):
+    current_day = Day.objects.filter(record_date=date)
+
+    if len(current_day) != 0:
+        return current_day[0]
+    else:
+        new_day = Day(record_date=date)
+        new_day.save()
+        return new_day
+
 # Create your views here.
 def schedule_view(request):
     return render(request, 'tracker_site/schedule.html')
@@ -56,7 +67,27 @@ def create_event_view(request):
 
     return JsonResponse(data)
 
-# TODO allow user to edit events
+def edit_event_info_view(request):
+    event_pk = request.GET.get("event_pk")
+
+    event_obj = Event.objects.get(pk=event_pk)
+    event_obj.task_done = request.GET.get("event_desc")
+    event_obj.task_duration = request.GET.get("event_duration")
+    event_obj.task_start_time = request.GET.get("event_time")
+    event_obj.task_date = get_day(request.GET.get("event_date"))
+
+    event_obj.save(update_fields=["task_done", "task_duration", "task_start_time", "task_date"]) 
+
+    data = {
+        "event_pk" : request.GET.get("event_pk"),
+        "event_date" : request.GET.get("event_date"),
+        "event_time" : request.GET.get("event_time"),
+        "event_duration" : request.GET.get("event_duration"),
+        "event_desc" : request.GET.get("event_desc"),
+    }
+
+    return JsonResponse(data)
+
 def delete_event_view(request):
     event_pk = request.GET.get("event_pk")
     Event.objects.filter(pk=event_pk).delete()
@@ -107,4 +138,18 @@ def update_day_summary_view(request):
         "date" : current_date,
         "summary" : day_summary
     }
+    return JsonResponse(data)
+
+def get_event_info_view(request):
+    event_pk = request.GET.get("event_pk")
+
+    event_obj = Event.objects.get(pk=event_pk)
+
+    data = {
+        "date" : event_obj.task_date.record_date,
+        "time" : event_obj.task_start_time,
+        "duration" : event_obj.task_duration,
+        "desc" : event_obj.task_done
+    }
+
     return JsonResponse(data)
