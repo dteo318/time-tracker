@@ -29,6 +29,8 @@ def read_day_view(request):
         events = Event.objects.filter(task_date=current_day[0]).order_by("task_start_time")
         feeling = current_day[0].feeling
         summary = current_day[0].summary
+        weather_avg_temp = current_day[0].weather_avg_temp
+        weather_icon = current_day[0].weather_icon
 
     else:
         # Day object is not created yet
@@ -38,6 +40,8 @@ def read_day_view(request):
         events = []
         feeling = None
         summary = None
+        weather_avg_temp = None
+        weather_icon = None
 
     data = {
         'is_day_created' : day_created, 
@@ -45,6 +49,8 @@ def read_day_view(request):
         'date' : current_date,
         'feeling' : feeling,
         'summary' : summary,
+        'weather_avg_temp' : weather_avg_temp,
+        'weather_icon' : weather_icon,
     }
 
     return JsonResponse(data)
@@ -139,6 +145,27 @@ def update_day_summary_view(request):
         "summary" : day_summary
     }
     return JsonResponse(data)
+
+def update_weather(request):
+    current_date = request.GET.get('date')
+    current_day = Day.objects.filter(record_date=current_date)[0]
+
+    weather_avg_temp = request.GET.get("weather_avg_temp")
+    weather_icon = request.GET.get("weather_icon")
+
+    current_day.weather_avg_temp = weather_avg_temp
+    current_day.weather_icon = weather_icon
+
+    current_day.save(update_fields=["weather_avg_temp", "weather_icon"])
+
+    data = {
+        "date" : current_date,
+        "weather_avg_temp" : weather_avg_temp,
+        "weather_icon" : weather_icon,
+    }
+
+    return JsonResponse(data)
+
 
 def get_event_info_view(request):
     event_pk = request.GET.get("event_pk")

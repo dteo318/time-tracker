@@ -422,6 +422,15 @@ function loadDayEvents() {
     },
     dataType: "json",
     success: function (data) {
+      // Loading weather
+      const weather_avg_temp = data.weather_avg_temp;
+      const weather_icon = data.weather_icon;
+      if (weather_avg_temp) {
+        updateWeatherIcon(weather_avg_temp, weather_icon);
+      } else {
+        getLocation();
+      }
+
       // Loading current summary
       const selected_summary = data.summary;
 
@@ -560,3 +569,81 @@ day_summary_input.addEventListener("focusout", function () {
     },
   });
 });
+
+// Getting day weather
+function getLocation() {
+  console.log("Loading weather...");
+  // Getting current location
+  if (window.navigator.geolocation) {
+    window.navigator.geolocation.getCurrentPosition(getWeather, console.log);
+  }
+}
+
+function updateWeatherIcon(avg_temp, icon_src) {
+  const day_weather_div = document.getElementById("day-weather");
+  day_weather_div.innerHTML = "";
+
+  const weather_img = document.createElement("img");
+  weather_img.src = "https:" + icon_src;
+  const weather_temp = document.createElement("p");
+  weather_temp.innerHTML = avg_temp;
+
+  day_weather_div.appendChild(weather_img);
+  day_weather_div.appendChild(weather_temp);
+
+  console.log("Weather set!");
+}
+
+function getWeather(location_obj) {
+  const latitude = location_obj.coords.latitude;
+  const longitude = location_obj.coords.longitude;
+
+  const day_date = document.getElementById("day-date");
+  const location = latitude + ", " + longitude;
+
+  const weather_api_key = "110afb9ef708408bac442550211506";
+  const weather_req_url =
+    "http://api.weatherapi.com/v1/history.json?key=" +
+    weather_api_key +
+    "&q=" +
+    location +
+    "&dt=" +
+    day_date.value;
+
+  $.ajax({
+    url: weather_req_url,
+    success: function (data) {
+      console.log("Weather found!");
+      const day_avg_temp = data.forecast.forecastday[0].day.avgtemp_f;
+      const day_weather_img_src =
+        data.forecast.forecastday[0].day.condition.icon;
+
+      updateWeatherIcon(day_avg_temp, day_weather_img_src);
+
+      $.ajax({
+        url: "/ajax/update_weather",
+        data: {
+          date: day_date.value,
+          weather_avg_temp: day_avg_temp,
+          weather_icon: day_weather_img_src,
+        },
+        dataType: "json",
+        success: function (data) {
+          console.log("Weather updated in database");
+        },
+      });
+    },
+    error: function () {
+      console.log("Unable to find weather...");
+      const day_weather_div = document.getElementById("day-weather");
+      day_weather_div.innerHTML = "";
+
+      const no_weather_temp = document.createElement("p");
+      no_weather_temp.innerHTML = "Unknown...";
+
+      day_weather_div.appendChild(no_weather_temp);
+
+      console.log("Unknown weather set!");
+    },
+  });
+}

@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import schedule_view, read_day_view, create_event_view, update_day_feeling_view, delete_event_view, update_day_summary_view, get_event_info_view, edit_event_info_view
+from .views import *
 
 urlpatterns = [
     path('', schedule_view, name='schedule_view'),
@@ -10,4 +10,5 @@ urlpatterns = [
     path('ajax/update_day_summary', update_day_summary_view, name="update_day_summary_view"),
     path('ajax/get_event_info', get_event_info_view, name="get_event_info_view"),
     path('ajax/edit_event_info', edit_event_info_view, name="edit_event_info_view"),
+    path('ajax/update_weather', update_weather, name="update_weather"),
 ]

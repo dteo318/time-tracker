@@ -14,6 +14,8 @@ class Day(models.Model):
     record_date = models.DateField()
     feeling = models.CharField(max_length=2, choices=FEELING_CHOICES, null=True)
     summary = models.TextField(null=True)
+    weather_avg_temp = models.CharField(max_length=5, null=True)
+    weather_icon = models.TextField(null=True)
 
 class Event(models.Model):
     task_done = models.CharField(max_length=200)
