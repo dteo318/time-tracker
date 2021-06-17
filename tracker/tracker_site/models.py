@@ -16,6 +16,7 @@ class Day(models.Model):
     summary = models.TextField(null=True)
     weather_avg_temp = models.CharField(max_length=5, null=True)
     weather_icon = models.TextField(null=True)
+    weather_location = models.CharField(max_length=50, null=True)
 
 class Event(models.Model):
     task_done = models.CharField(max_length=200)

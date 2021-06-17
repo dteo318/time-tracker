@@ -425,8 +425,10 @@ function loadDayEvents() {
       // Loading weather
       const weather_avg_temp = data.weather_avg_temp;
       const weather_icon = data.weather_icon;
+      const weather_location = data.weather_location;
+
       if (weather_avg_temp) {
-        updateWeatherIcon(weather_avg_temp, weather_icon);
+        updateWeatherIcon(weather_avg_temp, weather_icon, weather_location);
       } else {
         getLocation();
       }
@@ -575,18 +577,21 @@ function getLocation() {
   console.log("Loading weather...");
   // Getting current location
   if (window.navigator.geolocation) {
-    window.navigator.geolocation.getCurrentPosition(getWeather, console.log);
+    window.navigator.geolocation.getCurrentPosition(
+      getWeather_LongLat,
+      console.log
+    );
   }
 }
 
-function updateWeatherIcon(avg_temp, icon_src) {
+function updateWeatherIcon(avg_temp, icon_src, location) {
   const day_weather_div = document.getElementById("day-weather");
   day_weather_div.innerHTML = "";
 
   const weather_img = document.createElement("img");
   weather_img.src = "https:" + icon_src;
   const weather_temp = document.createElement("p");
-  weather_temp.innerHTML = avg_temp;
+  weather_temp.innerHTML = avg_temp + " | " + location;
 
   day_weather_div.appendChild(weather_img);
   day_weather_div.appendChild(weather_temp);
@@ -594,7 +599,7 @@ function updateWeatherIcon(avg_temp, icon_src) {
   console.log("Weather set!");
 }
 
-function getWeather(location_obj) {
+function getWeather_LongLat(location_obj) {
   const latitude = location_obj.coords.latitude;
   const longitude = location_obj.coords.longitude;
 
@@ -617,8 +622,15 @@ function getWeather(location_obj) {
       const day_avg_temp = data.forecast.forecastday[0].day.avgtemp_f;
       const day_weather_img_src =
         data.forecast.forecastday[0].day.condition.icon;
+      const location_name = data.location.name;
+      const location_region = data.location.region;
+      const location_display_name = location_name + ", " + location_region;
 
-      updateWeatherIcon(day_avg_temp, day_weather_img_src);
+      updateWeatherIcon(
+        day_avg_temp,
+        day_weather_img_src,
+        location_display_name
+      );
 
       $.ajax({
         url: "/ajax/update_weather",
@@ -626,6 +638,7 @@ function getWeather(location_obj) {
           date: day_date.value,
           weather_avg_temp: day_avg_temp,
           weather_icon: day_weather_img_src,
+          weather_location: location_display_name,
         },
         dataType: "json",
         success: function (data) {
