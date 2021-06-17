@@ -147,9 +147,7 @@
                     style="border: none; width: 275px"
                     class="title"
                   />
-                </section>
-                <section class="section">
-                  <p class="heading">Event Start Time</p>
+                  <p class="heading mt-5">Event Start Time</p>
                   <input
                     type="time"
                     name="event-time"
@@ -157,33 +155,31 @@
                     class="title"
                   />
                 </section>
-                <section class="section">
-                  <p class="heading">Event Duration</p>
-                  <input
-                    type="number"
-                    name="event-duration"
-                    id="event-duration"
-                    class="title has-text-centered"
-                    step="1"
-                    min="1"
-                    style="width: 100px"
-                  />
-                </section>
-                <section class="section">
-                  <p class="heading">Event Description</p>
-                  <textarea
-                    name="event-desc"
-                    id="event-desc"
-                    cols="50"
-                    rows="5"
-                    style="
-                      color: gray;
-                      border: 1px solid lightgray;
-                      font-size: 20px;
-                      padding: 15px;
-                    "
-                  ></textarea>
-                </section>
+
+                <p class="heading">Event Duration</p>
+                <input
+                  type="number"
+                  name="event-duration"
+                  id="event-duration"
+                  class="title has-text-centered"
+                  step="1"
+                  min="1"
+                  style="width: 100px"
+                />
+
+                <p class="heading mt-5">Event Description</p>
+                <textarea
+                  name="event-desc"
+                  id="event-desc"
+                  cols="50"
+                  rows="5"
+                  style="
+                    color: gray;
+                    border: 1px solid lightgray;
+                    font-size: 20px;
+                    padding: 15px;
+                  "
+                ></textarea>
               </section>
               <footer class="modal-card-foot">
                 <button
@@ -234,7 +230,7 @@
       </div>
     </div>
     <div class="container mt-3">
-      <!-- Add event modal card -->
+      <!-- Edit event modal card -->
       <div class="modal has-text-centered" id="edit-event-modal-div">
         <div class="modal-background"></div>
         <div class="modal-card">
@@ -256,8 +252,6 @@
                 style="border: none; width: 275px"
                 class="title"
               />
-            </section>
-            <section class="section">
               <p class="heading">Event Start Time</p>
               <input
                 type="time"
@@ -266,33 +260,31 @@
                 class="title"
               />
             </section>
-            <section class="section">
-              <p class="heading">Event Duration</p>
-              <input
-                type="number"
-                name="event-duration"
-                id="new-event-duration"
-                class="title has-text-centered"
-                step="1"
-                min="1"
-                style="width: 100px"
-              />
-            </section>
-            <section class="section">
-              <p class="heading">Event Description</p>
-              <textarea
-                name="event-desc"
-                id="new-event-desc"
-                cols="50"
-                rows="5"
-                style="
-                  color: gray;
-                  border: 1px solid lightgray;
-                  font-size: 20px;
-                  padding: 15px;
-                "
-              ></textarea>
-            </section>
+
+            <p class="heading">Event Duration</p>
+            <input
+              type="number"
+              name="event-duration"
+              id="new-event-duration"
+              class="title has-text-centered"
+              step="1"
+              min="1"
+              style="width: 100px"
+            />
+
+            <p class="heading mt-5">Event Description</p>
+            <textarea
+              name="event-desc"
+              id="new-event-desc"
+              cols="50"
+              rows="5"
+              style="
+                color: gray;
+                border: 1px solid lightgray;
+                font-size: 20px;
+                padding: 15px;
+              "
+            ></textarea>
           </section>
           <footer class="modal-card-foot">
             <button

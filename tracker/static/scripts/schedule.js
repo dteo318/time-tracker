@@ -111,17 +111,17 @@ function buildCard(
   const card_container = document.createElement("div");
   card_container.className = "card";
 
-  const card_image = document.createElement("div");
-  card_image.className = "card-image";
-  const card_image_figure = document.createElement("figure");
-  card_image_figure.className = "image is-4by3";
-  const card_image_img = document.createElement("img");
-  card_image_img.src = "https://bulma.io/images/placeholders/1280x960.png";
-  card_image_img.alt = "Placeholder image";
+  //   const card_image = document.createElement("div");
+  //   card_image.className = "card-image";
+  //   const card_image_figure = document.createElement("figure");
+  //   card_image_figure.className = "image is-4by3";
+  //   const card_image_img = document.createElement("img");
+  //   card_image_img.src = "https://bulma.io/images/placeholders/1280x960.png";
+  //   card_image_img.alt = "Placeholder image";
 
-  card_image_figure.appendChild(card_image_img);
-  card_image.appendChild(card_image_figure);
-  card_container.appendChild(card_image);
+  //   card_image_figure.appendChild(card_image_img);
+  //   card_image.appendChild(card_image_figure);
+  //   card_container.appendChild(card_image);
 
   const card_content = document.createElement("div");
   card_content.className = "card-content";

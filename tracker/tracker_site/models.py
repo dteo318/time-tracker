@@ -23,6 +23,7 @@ class Event(models.Model):
     task_date = models.ForeignKey(Day, on_delete=models.CASCADE)
     task_start_time = models.TimeField()
     task_duration = models.IntegerField(null=True)
+    task_image = models.ImageField(null=True)
 
     def __str__(self):
         return self.task_done
