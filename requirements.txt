@@ -1,9 +1,6 @@
 absl-py==0.11.0
 alabaster==0.7.12
 altgraph==0.17
-anaconda-client==1.7.2
-anaconda-navigator==1.10.0
-anaconda-project==0.8.3
 applaunchservices==0.2.1
 appnope @ file:///opt/concourse/worker/volumes/live/4f734db2-9ca8-4d8b-5b29-6ca15b4b4772/volume/appnope_1606859466979/work
 appscript @ file:///opt/concourse/worker/volumes/live/aa928f42-721f-468a-5637-76f7349085f8/volume/appscript_1594840167539/work
