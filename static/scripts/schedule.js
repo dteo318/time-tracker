@@ -608,7 +608,7 @@ function getWeather_LongLat(location_obj) {
 
   const weather_api_key = "110afb9ef708408bac442550211506";
   const weather_req_url =
-    "http://api.weatherapi.com/v1/history.json?key=" +
+    "https://api.weatherapi.com/v1/history.json?key=" +
     weather_api_key +
     "&q=" +
     location +
